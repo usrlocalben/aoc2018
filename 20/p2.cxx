@@ -51,7 +51,7 @@ struct Rect {
 
 
 /* bfs
-	dequeue<pair<XXX, int>> queue;
+	deque<pair<XXX, int>> queue;
 	unordered_set<XXX> visited;
 	queue.push_back({ xxx, 0 });
 	while (!queue.empty()) {
@@ -217,34 +217,6 @@ int main() {
 		 rooms[fromId].insert(toId);
 		 rooms[toId].insert(fromId); });
 
-
-	/*
-	string line;
-	string ltop;
-	line.push_back('#');
-	for (int x=leftTop.x; x<=rightBottom.x; x++) {
-		line.push_back('#');}
-	line.push_back('#');
-	ltop = line;
-	cout << ltop << "\n";
-	for (int y=leftTop.y; y<=rightBottom.y; y++) {
-		line.clear();
-		line.push_back('#');
-		for (int x=leftTop.x; x<=rightBottom.x; x++) {
-			if (offset == ivec2{x,y}) {
-				line.push_back('X'); }
-			else {
-				if (auto search = rooms.find((x<<16)|y); search!=rooms.end()) {
-					line.push_back('O'); }
-				else {
-					line.push_back(' '); }}}
-		line.push_back('#');
-		cout << line << "\n"; }
-	cout << ltop << "\n";
-	*/
-
-	//cout << "total rooms: " << rooms.size() << "\n";
-
 	unordered_map<int, int> roomDistance;
 
 	deque<pair<int, int>> queue;
@@ -259,11 +231,9 @@ int main() {
 		for (const auto& item : rooms[hpos]) {
 			queue.push_back({ item, hdist+1 }); }}
 
-	vector<pair<int, int>> rd2;
+	int cnt = 0;
 	for (const auto& item : roomDistance) {
-		rd2.push_back({ item.second, item.first }); }
-
-	sort(rd2.begin(), rd2.end());
-
-	cout << rd2.back().first << "\n";
+		if (item.second >= 1000) {
+			cnt++; }}
+	cout << cnt << "\n";
 	return 0; }

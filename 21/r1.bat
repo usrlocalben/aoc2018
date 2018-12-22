@@ -1,0 +1,1 @@
+cl /EHsc /std:c++17 /O2 p1.cxx
