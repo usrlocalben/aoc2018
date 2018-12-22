@@ -27,6 +27,8 @@ ivec2 operator+(ivec2 lhs, ivec2 rhs) {
 	return ivec2{ lhs.x + rhs.x, lhs.y + rhs.y }; }
 
 
+const int INF = 99999;
+
 int main() {
 	vector<int> positionX;
 	vector<int> positionY;
@@ -35,9 +37,10 @@ int main() {
 
 	string line;
 
-	int bbTop = -99999;
-	int bbBottom = 99999;
-	int bbLeft = 99999;
+	int bbTop = -INF;
+	int bbBottom = INF;
+	int bbLeft = INF;
+	int bbRight = -INF;
 	
 	while (getline(cin, line)) {
 		// "position=< 21992, -10766> velocity=<-2,  1>"
@@ -58,61 +61,39 @@ int main() {
 		bbTop = max(bbTop, posy);
 		bbBottom = min(bbBottom, posy);
 		bbLeft = min(bbLeft, posx);
+		bbRight = max(bbRight, posx);
 	}
 
 	const int sz = positionX.size();
 
-	//cout << "top: " << bbTop << "\n";
-	//cout << "bot: " << bbBottom << "\n";
-
-	/*
-	int yheight = bbTop - bbBottom;
 	int t = 0;
-	while (t < 10900) {
+	int prevHeight = bbTop - bbBottom;
+	int minHeight = prevHeight;
+	int minHeightT = 0;
+	while (1) {
 		t++;
-		bbTop = -99999;
-		bbBottom = 99999;
-		bbLeft = 99999;
+
+		bbTop = -INF;
+		bbBottom = INF;
+		bbLeft = INF;
+		bbRight = -INF;
 		for (int i=0; i<sz; i++) {
-			int nX = positionX[i] + velocityX[i];
-			int nY = positionY[i] + velocityY[i];
-			positionX[i] = nX;
-			positionY[i] = nY;
+			int nX = positionX[i] + (velocityX[i] * t);
+			int nY = positionY[i] + (velocityY[i] * t);
 			bbTop = max(bbTop, nY);
 			bbBottom = min(bbBottom, nY);
-			bbLeft = min(bbLeft, nX); }
-		int nheight = bbTop - bbBottom;
-		int delta = nheight - yheight;
-		cout << "t:" << t << ", h:" << nheight << ", d:" << delta << ", top:" << bbTop << ", bot:" << bbBottom << ", left:" << bbLeft << "\n";
-		yheight = nheight; }
-	*/
+			bbLeft = min(bbLeft, nX);
+			bbRight = max(bbRight, nX); }
 
-	const int bufWidth = 80;
-	const int bufHeight = 25;
-	vector<char> pixels(bufWidth*bufHeight, ' ');
+		int curHeight = bbTop - bbBottom;
+		if (curHeight < minHeight) {
+			minHeight = curHeight;
+			minHeightT = t;}
+		else if (curHeight > minHeight) {
+			// now past the minimum
+			break; }
 
-	const int t = 10886;
-	for (int i=0; i<sz; i++) {
-		int nX = positionX[i] + velocityX[i]*t;
-		int nY = positionY[i] + velocityY[i]*t;
-		positionX[i] = nX;
-		positionY[i] = nY; }
+		prevHeight = curHeight; }
 
-	for (int by=0; by<bufHeight; by++) {
-		int sy = by + 111;
-		for (int bx=0; bx<bufWidth; bx++) {
-			int sx = bx + 161;
-
-			for (int i=0; i<sz; i++) {
-				if (positionX[i] == sx && positionY[i] == sy) {
-					pixels[by*bufWidth+bx] = '=';
-					break; }}}}
-
-	string tmp;
-	for (int by=0; by<bufHeight; by++) {
-		tmp = "";
-		for (int bx=0; bx<bufWidth; bx++) {
-			tmp.push_back(pixels[by*bufWidth+bx]); }
-		cout << tmp << "\n"; }
-
+	cout << minHeightT << "\n";
 	return 0; }

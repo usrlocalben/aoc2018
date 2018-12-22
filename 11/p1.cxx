@@ -7,9 +7,12 @@
 #include <utility>
 #include <vector>
 
-const int serial = 4151;
 
 using namespace std;
+
+int serial;
+const int DIM = 300;
+const int INF = 999999;
 
 
 const int level(int x, int y) {
@@ -23,29 +26,29 @@ const int level(int x, int y) {
 
 
 int main() {
-	vector<int> cells(300*300, 0);
-	for (int y=0; y<300; y++) {
-		cout << "." << flush;
-		for (int x=0; x<300; x++) {
-			cells[y*300+x] = level(x+1, y+1); }}
+	cin >> serial;
 
-	vector<int> sums(300*300, 0);
+	vector<int> cells(DIM*DIM, 0);
+	for (int y=0; y<DIM; y++) {
+		for (int x=0; x<DIM; x++) {
+			cells[y*DIM+x] = level(x+1, y+1); }}
+
+	vector<int> sums(DIM*DIM, 0);
 	int bestX = -1;
 	int bestY = -1;
-	int best = -999999;
-
-	for(int y=0; y<300-2; y++) {
-		cout << "." << flush;
-		for(int x=0; x<300-2; x++) {
+	int best = -INF;
+	for(int y=0; y<DIM-2; y++) {
+		//cout << "." << flush;
+		for(int x=0; x<DIM-2; x++) {
 			int ax = 0;
 			for (int sy=y; sy<y+3; sy++) {
 				for (int sx=x; sx<x+3; sx++) {
-					ax += cells[sy*300+sx]; }}
+					ax += cells[sy*DIM+sx]; }}
 			if (ax > best) {
 				best = ax;
 				bestX = x;
 				bestY = y; }}}
 
-	cout << "bx:" << (bestX+1) << ", by:" << (bestY+1) << "\n";
-	//cout << cells[78*300+121] << "\n";
+	cout << (bestX+1) << "," << (bestY+1) << "\n";
+	//cout << cells[78*DIM+121] << "\n";
 	return 0; }

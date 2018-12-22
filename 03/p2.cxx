@@ -10,17 +10,15 @@ using namespace std;
 struct ivec2 {
 	int x, y; };
 
+
 struct Rect {
 	ivec2 left_top;
 	ivec2 right_bottom;
+
 	int area() const {
 		return ((right_bottom.x - left_top.x) *
-			(right_bottom.y - left_top.y)); }
-};
+			(right_bottom.y - left_top.y)); } };
 
-struct Claim {
-	int id;
-	Rect rect; };
 
 vector<string> split(const string& str, char ch) {
 	vector<string> out;
@@ -35,6 +33,10 @@ vector<string> split(const string& str, char ch) {
 		match = src.find(ch); }
 	return out; }
 
+
+struct Claim {
+	int id;
+	Rect rect; };
 
 
 Claim parseClaim(const string& text) {
@@ -63,28 +65,30 @@ Claim parseClaim(const string& text) {
 	return c; }
 
 
-int main() {
+const int DIM = 1000;
 
+
+int main() {
 	string line;
 	vector<Claim> claims;
 	while (getline(cin, line)) {
 		Claim c = parseClaim(line);
 		claims.push_back(c); }
 
-	vector<int> sheet(1000*1000, 0);
+	vector<int> sheet(DIM*DIM, 0);
 	for (const auto& c : claims) {
 		for (int y=c.rect.left_top.y; y<c.rect.right_bottom.y; y++) {
 			for (int x=c.rect.left_top.x; x<c.rect.right_bottom.x; x++) {
-				sheet[y*1000 + x]++; }}}
+				sheet[y*DIM+x]++; }}}
 
 	for (const auto& c : claims) {
 		int ax = 0;
 		for (int y=c.rect.left_top.y; y<c.rect.right_bottom.y; y++) {
 			for (int x=c.rect.left_top.x; x<c.rect.right_bottom.x; x++) {
-				ax += sheet[y*1000 + x]; }}
+				ax += sheet[y*DIM+x]; }}
 		if (ax == c.rect.area()) {
 			cout << c.id << "\n";
 			return 0; }}
 
-	cout << "notfound\n";
-	return 0; }
+	cout << "not found\n";
+	return 1; }

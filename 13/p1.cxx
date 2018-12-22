@@ -47,33 +47,35 @@ ivec2 turnLeft(ivec2 a) {
 	return ivec2{a.y, 0};}
 
 
+const ivec2 EAST{1,0};
+const ivec2 WEST{-1,0};
+const ivec2 NORTH{0,-1};
+const ivec2 SOUTH{0,1};
+
+
 int main() {
 	vector<string> map;
 	vector<Cart> carts;
 
-	const ivec2 east{1,0};
-	const ivec2 west{-1,0};
-	const ivec2 north{0,-1};
-	const ivec2 south{0,1};
 	string line;
 	int y=0;
 	while (getline(cin, line)) {
 		for (int x=0; x<line.length(); x++) {
 			switch (line[x]) {
 			case '>':
-				carts.push_back(Cart{ {x,y}, east, 0 });
+				carts.push_back(Cart{ {x,y}, EAST, 0 });
 				line[x] = '-';
 				break;
 			case '<':
-				carts.push_back(Cart{ {x,y}, west, 0 });
+				carts.push_back(Cart{ {x,y}, WEST, 0 });
 				line[x] = '-';
 				break;
 			case '^':
-				carts.push_back(Cart{ {x,y}, north, 0 });
+				carts.push_back(Cart{ {x,y}, NORTH, 0 });
 				line[x] = '|';
 				break;
 			case 'v':
-				carts.push_back(Cart{ {x,y}, south, 0 });
+				carts.push_back(Cart{ {x,y}, SOUTH, 0 });
 				line[x] = '|';
 				break;
 			default:
@@ -92,7 +94,7 @@ int main() {
 
 	int t=0;
 
-	ivec2 crashPosition{ 99999, 99999 };
+	ivec2 crashPosition{ -1, -1 };
 
 	while (1) {
 		sortCarts();
@@ -119,30 +121,30 @@ int main() {
 				const auto& other = carts[oi];
 				if (ac.pos == other.pos) {
 					// collision!
-					cout << "ci:" << ci << ", other:" << oi << "\n";
+					//cout << "ci:" << ci << ", other:" << oi << "\n";
 					crashPosition = ac.pos;
 					goto crash; }}
 
 			switch (map[ac.pos.y][ac.pos.x]) {
 			case '/':
-				if (ac.vel == west) {
-					ac.vel = south; }
-				else if (ac.vel == east) {
-					ac.vel = north; }
-				else if (ac.vel == north) {
-					ac.vel = east; }
-				else if (ac.vel == south) {
-					ac.vel = west; }
+				if (ac.vel == WEST) {
+					ac.vel = SOUTH; }
+				else if (ac.vel == EAST) {
+					ac.vel = NORTH; }
+				else if (ac.vel == NORTH) {
+					ac.vel = EAST; }
+				else if (ac.vel == SOUTH) {
+					ac.vel = WEST; }
 				break;
 			case '\\':
-				if (ac.vel == west) {
-					ac.vel = north; }
-				else if (ac.vel == east) {
-					ac.vel = south; }
-				else if (ac.vel == north) {
-					ac.vel = west; }
-				else if (ac.vel == south) {
-					ac.vel = east; }
+				if (ac.vel == WEST) {
+					ac.vel = NORTH; }
+				else if (ac.vel == EAST) {
+					ac.vel = SOUTH; }
+				else if (ac.vel == NORTH) {
+					ac.vel = WEST; }
+				else if (ac.vel == SOUTH) {
+					ac.vel = EAST; }
 				break;
 			case '-':
 				break;
@@ -159,5 +161,5 @@ int main() {
 		t++; }
 
 crash:
-	cout << "crash at " << crashPosition << "\n";
+	cout << crashPosition.x << "," << crashPosition.y << "\n";
 	return 0; }

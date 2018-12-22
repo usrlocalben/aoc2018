@@ -11,12 +11,27 @@ using namespace std;
 
 
 int main() {
-	vector<char> scores; scores.reserve(1000000);
-	int ai = 0;
-	int bi = 1;
-	scores.push_back(3);
-	scores.push_back(7);
+	vector<char> sequence;
+	int x;
+	cin >> x;
+	while (x) {
+		sequence.insert(sequence.begin(), x%10);
+		x /= 10;}
 
+	vector<char> scores; scores.reserve(1000000);
+
+	auto backMatch = [&]() {
+		if (scores.size() >= sequence.size()) {
+			for (int i=0; i<sequence.size(); i++) {
+				if (scores[scores.size()-1-i] != sequence[sequence.size()-1-i]) {
+					return false; }}
+			return true;}
+		return false;};
+
+	int ai = 0;
+	scores.push_back(3);
+	int bi = 1;
+	scores.push_back(7);
 	while (1) {
 		int s = scores[ai] + scores[bi];
 
@@ -24,23 +39,13 @@ int main() {
 		int y = s%10;
 		if (x) {
 			scores.push_back(x); 
-			if (scores.size() >= 6 && scores.back() == 1) {
-				if ((scores[scores.size()-2] == 7) &&
-					(scores[scores.size()-3] == 9) &&
-					(scores[scores.size()-4] == 0) &&
-					(scores[scores.size()-5] == 3) &&
-					(scores[scores.size()-6] == 4)) {
-					cout << scores.size() - 6 << "\n";
-					break;}}}
-		scores.push_back(y);
-		if (scores.size() >= 6 && scores.back() == 1) {
-			if ((scores[scores.size()-2] == 7) &&
-			    (scores[scores.size()-3] == 9) &&
-			    (scores[scores.size()-4] == 0) &&
-			    (scores[scores.size()-5] == 3) &&
-			    (scores[scores.size()-6] == 4)) {
+			if (backMatch()) {
 				cout << scores.size() - 6 << "\n";
 				break;}}
+		scores.push_back(y);
+		if (backMatch()) {
+			cout << scores.size() - 6 << "\n";
+			break;}
 
 		int askip = 1 + scores[ai];
 		int bskip = 1 + scores[bi];

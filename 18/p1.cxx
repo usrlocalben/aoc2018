@@ -66,10 +66,10 @@ int main() {
 					tmp[y][x] = (lCnt >= 3 ? LUMBERYARD : TREES); }
 				else if (htype == LUMBERYARD) {
 					tmp[y][x] = ((lCnt>=1 && tCnt>=1) ? LUMBERYARD : GROUND); }}}
-		cout << "-----\n" << flush;
+		//cout << "-----\n" << flush;
 
-		for (const auto& line : tmp) {
-			cout << line << "\n"; }
+		//for (const auto& line : tmp) {
+		//	cout << line << "\n"; }
 
 		swap(map, tmp); }
 

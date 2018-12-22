@@ -49,6 +49,14 @@ struct DateTime {
 		return out; }};
 
 
+bool consumePrefix(string& text, const string& prefix) {
+	const int prefixLen = prefix.size();
+	if (text.substr(0, prefixLen) == prefix) {
+		text = text.substr(prefixLen);
+		return true; }
+	return false; }
+
+
 struct Guard {
 	int id = -1;
 	vector<pair<int, int>> sleep;
@@ -58,20 +66,12 @@ struct Guard {
 		sleep.clear(); } };
 
 
-bool consumePrefix(string& text, const string& prefix) {
-	const int prefixLen = prefix.size();
-	if (text.substr(0, prefixLen) == prefix) {
-		text = text.substr(prefixLen);
-		return true; }
-	return false; }
-
-
 int main() {
-
 	string line;
 	vector<string> entries;
 	while (getline(cin, line)) {
 		entries.push_back(line); }
+
 	sort(entries.begin(), entries.end());
 
 	vector<pair<int, Guard>> days;

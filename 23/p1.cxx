@@ -35,6 +35,11 @@ const auto DOWN = ivec2{0,1};
 const auto LEFT = ivec2{-1,0};
 const auto RIGHT = ivec2{1,0};
 
+const auto NORTH = UP;
+const auto SOUTH = DOWN;
+const auto EAST = RIGHT;
+const auto WEST = LEFT;
+
 ostream& operator<<(ostream& stream, ivec2 item) {
 	stream << "(" << item.x << ", " << item.y << ")";
 	return stream; }

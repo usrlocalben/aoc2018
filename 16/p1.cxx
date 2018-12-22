@@ -13,28 +13,6 @@
 using namespace std;
 
 
-struct CPU {
-	array<int, 4> r = {0,0,0,0}; };
-
-enum Opcode {
-	addr,
-	addi,
-	mulr,
-	muli,
-	banr,
-	bani,
-	borr,
-	bori,
-	setr,
-	seti,
-	gtir,
-	gtri,
-	gtrr,
-	eqir,
-	eqri,
-	eqrr };
-
-
 std::vector<std::string> split(const std::string& str, char ch) {
 	std::vector<std::string> items;
 	std::string src(str);
@@ -47,6 +25,21 @@ std::vector<std::string> split(const std::string& str, char ch) {
 		nextmatch = src.find(ch); }
 
 	return items; }
+
+
+struct CPU {
+	array<int, 4> r = {0,0,0,0}; };
+
+
+enum Opcode {
+	addr, addi,
+	mulr, muli,
+	banr, bani,
+	borr, bori,
+	setr, seti,
+	gtir, gtri, gtrr,
+	eqir, eqri, eqrr };
+
 
 CPU execute(CPU cpu_, Opcode opcode, int arg1, int arg2, int output) {
 	CPU cpu = cpu_;
@@ -71,7 +64,6 @@ CPU execute(CPU cpu_, Opcode opcode, int arg1, int arg2, int output) {
 	default: assert(false); }
 	cpu.r[output] = result;
 	return cpu; }
-
 
 
 int main() {
@@ -104,10 +96,11 @@ int main() {
 				if (result.r == after.r) {
 					many++; }}
 			if (many >= 3) {
-				hits++;
-				cout << "x" << flush; }
+				//cout << "x" << flush;
+				hits++; }
 			else {
-				cout << "." << flush; }
+				//cout << "." << flush;
+				}
 			// process...
 		}
 		else if (line.length()) {

@@ -24,6 +24,9 @@ vector<string> split(const string& str, char ch) {
 	return out; }
 
 
+const int OFFSET = 50;
+
+
 int main() {
 	string initial;
 	getline(cin, initial);
@@ -38,24 +41,26 @@ int main() {
 		auto segments = split(line, ' ');
 		patterns[segments[0]] = segments[2][0]; }
 
-	initial.insert(initial.begin(), 50, '.');
-	initial.append(50, '.');
-	cout << " 0: " << initial << "\n";
-	//
+	initial.insert(initial.begin(), OFFSET, '.');
+	initial.append(OFFSET, '.');
+	//cout << " 0: " << initial << "\n";
 
 	const int sz = initial.length();
 	string tmp;
 	string chunk;
-	int offset = -50;
+	int offset = -OFFSET;
 	int ax = 0;
-	for (int n=1; n<=10000; n++) {
+	int prevSum = 0;
+	int prevDelta = 0;
+	int n = 1;
+	while (1) {
 		tmp = "..";
 		for (int i=2; i<sz-2; i++) {
 			chunk = initial.substr(i-2, 5);
 			auto result = patterns.find(chunk)->second;
 			tmp.push_back(result); }
 		tmp += "..";
-		cout << " " << n << ": " << tmp << "\n";
+		//cout << " " << n << ": " << tmp << "\n";
 		initial = tmp.substr(1) + ".";
 		offset++;
 
@@ -65,13 +70,20 @@ int main() {
 			if (ch == '#') {
 				ax += num; }
 			num++; }}
-		cout << offset << ", " << ax << "\n";}
+		int delta = ax - prevSum;
+		if (prevDelta == delta) {
+			//cout << "repeat at " << n << ", " << delta << "\n";
+			break; }
+		//cout << offset << ", " << (ax - prevSum) << "\n";
+		prevDelta = delta;
+		prevSum = ax;
+		n++; }
 
 	// eventually it stablizies
 	// all plants shift +1 in each generation, or +72
 	
-	{int64_t n = 50000000000;
-	n -= 10000;
-	n *= 72;
-	cout << ax + n << "\n";}
+	{int64_t target = 50000000000;
+	auto needed = target - n;
+	auto total = ax + (needed * prevDelta);
+	cout << total << "\n";}
 	return 0; }

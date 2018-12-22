@@ -24,6 +24,8 @@ vector<string> split(const string& str, char ch) {
 		match = src.find(ch); }
 	return out; }
 
+const int OFFSET = 50;
+
 
 int main() {
 	string initial;
@@ -39,10 +41,9 @@ int main() {
 		auto segments = split(line, ' ');
 		patterns[segments[0]] = segments[2][0]; }
 
-	initial.insert(initial.begin(), 50, '.');
-	initial.append(50, '.');
-	cout << " 0: " << initial << "\n";
-	//
+	initial.insert(initial.begin(), OFFSET, '.');
+	initial.append(OFFSET, '.');
+	//cout << " 0: " << initial << "\n";
 
 	const int sz = initial.length();
 	string tmp;
@@ -54,11 +55,11 @@ int main() {
 			auto result = patterns.find(chunk)->second;
 			tmp.push_back(result); }
 		tmp += "..";
-		cout << " " << n << ": " << tmp << "\n";
+		//cout << " " << n << ": " << tmp << "\n";
 		initial = tmp; }
 
 	int ax = 0;
-	int num = -50;
+	int num = -OFFSET;
 	for (const auto ch : initial) {
 		if (ch == '#') {
 			ax += num; }

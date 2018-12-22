@@ -108,20 +108,16 @@ bool consumeSuffix(string& text, const string& match) {
 		return true; }
 	return false; }
 
+
 const auto NORTH2 = ivec2{0,-2};
 const auto SOUTH2 = ivec2{0, 2};
 const auto WEST2 = ivec2{-2, 0};
 const auto EAST2 = ivec2{ 2, 0};
 
-int numPaths = 0;
-int maxDepth = 0;
-
-
-
 
 template <typename VISITOR>
-bool walk(const string& text, ivec2 curPos, int i, int sel, int depth, VISITOR& visitor) {
-	//cout << "walk(" << curPos << ", i=" << i << ", sel=" << sel << ", depth=" << depth << "\n";
+bool walk(const string& text, ivec2 curPos, int i, int sel, VISITOR& visitor) {
+	//cout << "walk(" << curPos << ", i=" << i << ", sel=" << sel << "\n";
 
 	int groupNum = 0;
 	bool active = (groupNum == sel);
@@ -169,7 +165,7 @@ bool walk(const string& text, ivec2 curPos, int i, int sel, int depth, VISITOR& 
 				int subSel = 0;
 				bool more = true;
 				do {
-					more = walk(text, curPos, i+1, subSel, depth+1, visitor);
+					more = walk(text, curPos, i+1, subSel, visitor);
 					subSel++;
 				} while (more);
 				return true;}}
@@ -182,11 +178,10 @@ bool walk(const string& text, ivec2 curPos, int i, int sel, int depth, VISITOR& 
 		default: assert(false); }
 		i++; }
 
-	numPaths++;
-	maxDepth = max(maxDepth, depth);
-	if (numPaths % 100000 == 0) {
-		cout << "numPaths:" << numPaths << ", maxDepth:" << maxDepth << "\n";}
 	return true;}
+
+
+const int INF = 9999999;
 
 
 int main() {
@@ -196,9 +191,9 @@ int main() {
 	unordered_map<int, unordered_set<int>> rooms;
 
 	// find bounding box
-	ivec2 leftTop = { 9999999, 9999999 };
-	ivec2 rightBottom = { -9999999, -9999999 };
-	walk(dirs, ivec2{0,0}, 1, 0, 0, [&](ivec2 from, ivec2 to) {
+	ivec2 leftTop = { INF, INF };
+	ivec2 rightBottom = { -INF, -INF };
+	walk(dirs, ivec2{0,0}, 1, 0, [&](ivec2 from, ivec2 to) {
 		 leftTop = vmin(leftTop, to);
 		 rightBottom = vmax(rightBottom, to);});
 
@@ -206,9 +201,9 @@ int main() {
 	auto offset = ivec2{0,0} - leftTop;
 
 	// walk and store rooms and edges
-	leftTop = { 9999999, 9999999 };
-	rightBottom = { -9999999, -9999999 };
-	walk(dirs, offset, 1, 0, 0, [&](ivec2 from, ivec2 to) {
+	leftTop = { INF, INF };
+	rightBottom = { -INF, -INF };
+	walk(dirs, offset, 1, 0, [&](ivec2 from, ivec2 to) {
 		 leftTop = vmin(leftTop, to);
 		 rightBottom = vmax(rightBottom, to);
 

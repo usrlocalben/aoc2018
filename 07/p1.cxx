@@ -9,6 +9,7 @@
 
 using namespace std;
 
+
 vector<string> split(const string& str, char ch) {
 	vector<string> out;
 	string src(str);
@@ -47,11 +48,8 @@ int main() {
 				ready.push_back(node); }}
 
 		sort(ready.begin(), ready.end());
-		{
-			auto node = ready.front();
-			string tmp = " ";
-			tmp[0] = node+'A';
-			cout << tmp;
-			nodes.erase(node); }}
+		auto node = ready.front();
+		cout << char(node+'A');
+		nodes.erase(node); }
 	cout << "\n";
 	return 0; }

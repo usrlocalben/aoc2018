@@ -76,19 +76,16 @@ int main() {
 			sort(ready.begin(), ready.end());
 			if (ready.empty()) {
 				break; }
-			{
-				auto node = ready.front();
-				int timeNeeded = 60 + node + 1; // XXX + 60
-				workers.push_back({ node, timeNeeded });
-				pending.insert(node); }
-		}
 
-		cout << "T:" << t << " ";
+			auto node = ready.front();
+			int timeNeeded = 60 + node + 1;
+			workers.push_back({ node, timeNeeded });
+			pending.insert(node); }
+
+		/*cout << "T:" << t << " ";
 		for (const auto& w :workers) {
-			string tmp = " ";
-			tmp[0] = w.first + 'A';
-			cout << tmp << " "; }
-		cout << "\n";
+			cout << char(w.first+'A') << " "; }
+		cout << "\n";*/
 		t++; }
 
 	cout << t << "\n";

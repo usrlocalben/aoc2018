@@ -13,53 +13,6 @@
 using namespace std;
 
 
-struct CPU {
-	array<int, 6> r = {0,0,0,0,0,0}; };
-
-enum Opcode {
-	addr,
-	addi,
-	mulr,
-	muli,
-	banr,
-	bani,
-	borr,
-	bori,
-	setr,
-	seti,
-	gtir,
-	gtri,
-	gtrr,
-	eqir,
-	eqri,
-	eqrr };
-
-vector<string> opcodeText = {
-	"addr",
-	"addi",
-	"mulr",
-	"muli",
-	"banr",
-	"bani",
-	"borr",
-	"bori",
-	"setr",
-	"seti",
-	"gtir",
-	"gtri",
-	"gtrr",
-	"eqir",
-	"eqri",
-	"eqrr" };
-
-
-Opcode decodeOpcodeText(const string& text) {
-	for (int i=0; i<opcodeText.size(); i++) {
-		if (opcodeText[i] == text) {
-			return static_cast<Opcode>(i); }}
-	return Opcode::addr; }
-
-
 std::vector<std::string> split(const std::string& str, char ch) {
 	std::vector<std::string> items;
 	std::string src(str);
@@ -72,6 +25,38 @@ std::vector<std::string> split(const std::string& str, char ch) {
 		nextmatch = src.find(ch); }
 
 	return items; }
+
+
+struct CPU {
+	array<int, 6> r = {0,0,0,0,0,0}; };
+
+
+enum Opcode {
+	addr, addi,
+	mulr, muli,
+	banr, bani,
+	borr, bori,
+	setr, seti,
+	gtir, gtri, gtrr,
+	eqir, eqri, eqrr };
+
+
+vector<string> opcodeText = {
+	"addr", "addi",
+	"mulr", "muli",
+	"banr", "bani",
+	"borr", "bori",
+	"setr", "seti",
+	"gtir", "gtri", "gtrr",
+	"eqir", "eqri", "eqrr" };
+
+
+Opcode decodeOpcodeText(const string& text) {
+	for (int i=0; i<opcodeText.size(); i++) {
+		if (opcodeText[i] == text) {
+			return static_cast<Opcode>(i); }}
+	return Opcode::addr; }
+
 
 CPU execute(CPU cpu_, Opcode opcode, int arg1, int arg2, int output) {
 	CPU cpu = cpu_;
@@ -102,17 +87,18 @@ struct Inst {
 	Opcode opcode;
 	int a, b, c; };
 
+
 int main() {
 	string line;
 
 	vector<Inst> mem;
 
-	bool first = true;
+	int ipreg = 0;
 	while (getline(cin, line)) {
-		if (first) {
-			first = false; }
+		auto segments = split(line, ' ');
+		if (line[0] == '#') {
+			ipreg = stoi(segments[1]); }
 		else {
-			auto segments = split(line, ' ');
 			auto opcode = decodeOpcodeText(segments[0]);
 			int aa = stoi(segments[1]);
 			int bb = stoi(segments[2]);
@@ -120,9 +106,8 @@ int main() {
 			mem.push_back({ opcode, aa, bb, cc });}}
 
 	int ip = 0;
-	int ipreg = 4;
 	CPU cpu;
-	cpu.r[0] = 1;
+	cpu.r[0] = 0;
 	while (ip < mem.size() && ip >= 0) {
 		cpu.r[ipreg] = ip;
 		const auto& inst = mem[ip];

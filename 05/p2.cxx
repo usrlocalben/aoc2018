@@ -29,10 +29,10 @@ int main() {
 
 	string line;
 	for (char ig='a'; ig<='z'; ig++) {
-		line = "";
+		line.clear();
 		for (const auto ch : lineSrc) {
 			if (tolower(ch) != ig) {
-				line += ch; }}
+				line.push_back(ch); }}
 
 		int sp = 0;
 		while (1) {
@@ -41,7 +41,7 @@ int main() {
 				break; }
 			line = line.substr(0, rpos) + line.substr(rpos + 2, line.size());
 			sp = max(rpos - 1, 0); }
-		cout << ig << flush;
+		//cout << ig << flush;
 		
 		best = min(best, int(line.size())); }
 

@@ -9,15 +9,21 @@
 
 using namespace std;
 
+const int WANTED = 10;
+
 
 int main() {
-	vector<char> scores; scores.reserve(1000000);
+	int startAt;
+	cin >> startAt;
+
+	vector<char> scores; scores.reserve(startAt+WANTED);
+
 	int ai = 0;
-	int bi = 1;
 	scores.push_back(3);
+	int bi = 1;
 	scores.push_back(7);
 
-	while (scores.size() < 430971+10) {
+	while (scores.size() < startAt+WANTED) {
 		int s = scores[ai] + scores[bi];
 
 		int x = s/10;
@@ -29,12 +35,9 @@ int main() {
 		int askip = 1 + scores[ai];
 		int bskip = 1 + scores[bi];
 		ai = (ai+askip) % scores.size();
-		bi = (bi+bskip) % scores.size();
+		bi = (bi+bskip) % scores.size(); }
 
-	}
-
-	for (int idx=scores.size()-10; idx<scores.size(); idx++) {
+	for (int idx=scores.size()-WANTED; idx<scores.size(); idx++) {
 		cout << int(scores[idx]); }
 	cout << "\n";
-
 	return 0; }

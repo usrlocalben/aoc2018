@@ -240,7 +240,7 @@ int main() {
 	int t = 0;
 	int pi = 0;
 	sortPlayers();
-cout << "staring round " << (t+1) << "\n";
+//cout << "starting round " << (t+1) << "\n";
 //printState();
 	while (numTeamsAlive() > 1) {
 		auto& player = players[pi];
@@ -263,7 +263,7 @@ cout << "staring round " << (t+1) << "\n";
 
 		if (++pi == players.size()) {
 			t++;
-cout << "staring round " << (t+1) << "\n";
+//cout << "starting round " << (t+1) << "\n";
 //printState();
 			sortPlayers();
 			pi = 0; }}

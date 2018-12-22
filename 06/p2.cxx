@@ -52,9 +52,12 @@ vector<string> split(const string& str, char ch) {
 	return out; }
 
 
+const int INF = 99999;
+
+
 int main() {
 	string line;
-	ivec2 left_top{ 99999, 99999 };
+	ivec2 left_top{ INF, INF };
 	vector<ivec2> points;
 
 	while (getline(cin, line)) {
@@ -63,14 +66,14 @@ int main() {
 		left_top = vmin(left_top, pos);
 		points.push_back(pos); }
 
-	cout << "leftTop: " << left_top << "\n";
+	//cout << "leftTop: " << left_top << "\n";
 
 	ivec2 right_bottom{ 0, 0 };
 	for (auto& point : points) {
 		point = point - left_top;
 		right_bottom = vmax(right_bottom, point); }
 
-	cout << "rightBottom: " << right_bottom << "\n";
+	//cout << "rightBottom: " << right_bottom << "\n";
 	auto dim = right_bottom + ivec2{1,1};
 
 	vector<int> space(dim.x*dim.y, 0);

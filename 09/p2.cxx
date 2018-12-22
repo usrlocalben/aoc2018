@@ -9,6 +9,20 @@
 using namespace std;
 
 
+vector<string> split(const string& str, char ch) {
+	vector<string> out;
+	string src(str);
+	auto match = src.find(ch);
+	while (1) {
+		auto item = src.substr(0, match);
+		out.push_back(item);
+		if (match == string::npos) {
+			break; }
+		src = src.substr(match + 1);
+		match = src.find(ch); }
+	return out; }
+
+	
 struct Node {
 	int64_t num = -1;
 	Node* next = nullptr;
@@ -24,18 +38,20 @@ Node *make_node(int num) {
 
 
 int main() {
-	nodepile.reserve(80000*100);
-	ni = 0;
+	string line;
+	getline(cin, line);
+	auto segments = split(line, ' ');
+	const int numPlayers = stoi(segments[0]);
+	const int lastMarble = stoi(segments[6]) * 100;
 
-	const int numPlayers = 435;
-	const int lastMarble = 71184 * 100;
+	nodepile.reserve(lastMarble * 100);
+	ni = 0;
 
 	Node *cm = make_node(0);
 	cm->next = cm;
 	cm->prev = cm;
 	Node *head = cm;
 	Node *tail = cm;
-
 
 	auto printCircle = [&]() {
 		Node *pos = head;
@@ -60,8 +76,8 @@ int main() {
 
 	int player = 1;
 	for (int64_t m=1; m<=lastMarble; m++) {
-		if (m%10000==0) {
-			cout << "." << flush; }
+		//if (m%10000==0) {
+		//	cout << "." << flush; }
 		if (m%23 == 0) {
 			scores[player] += m;
 

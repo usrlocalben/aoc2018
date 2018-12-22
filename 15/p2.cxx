@@ -267,7 +267,6 @@ int main() {
 
 		if (++pi == players.size()) {
 			t++;
-//cout << "staring round " << (t+1) << "\n";
 //printState();
 			sortPlayers();
 			pi = 0; }}
@@ -281,8 +280,9 @@ int main() {
 			ax += player.life; }}
 
 	outcome = t * ax;
-	cout << "winner:" << survivingTeam << ", outcome:" << outcome << "\n";
+	//cout << "winner:" << survivingTeam << ", outcome:" << outcome << "\n";
 	eAttack++;
 	} while (survivingTeam == 'G' || (numAlive != numElves));
 
+	cout << outcome << "\n";
 	return 0; }

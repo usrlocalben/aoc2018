@@ -10,13 +10,11 @@ using namespace std;
 struct ivec2 {
 	int x, y; };
 
-struct Rect {
-	ivec2 left_top;
-	ivec2 right_bottom; };
 
-struct Claim {
-	int id;
-	Rect rect; };
+struct Rect {
+	ivec2 leftTop;
+	ivec2 rightBottom; };
+
 
 vector<string> split(const string& str, char ch) {
 	vector<string> out;
@@ -31,6 +29,10 @@ vector<string> split(const string& str, char ch) {
 		match = src.find(ch); }
 	return out; }
 
+
+struct Claim {
+	int id;
+	Rect rect; };
 
 
 Claim parseClaim(const string& text) {
@@ -59,22 +61,23 @@ Claim parseClaim(const string& text) {
 	return c; }
 
 
-int main() {
+const int DIM = 1000;
 
-	vector<int> sheet(1000*1000, 0);
+
+int main() {
+	vector<int> sheet(DIM*DIM, 0);
 	string line;
 	while (getline(cin, line)) {
 		Claim c = parseClaim(line);
 
-		for (int y=c.rect.left_top.y; y<c.rect.right_bottom.y; y++) {
-			for (int x=c.rect.left_top.x; x<c.rect.right_bottom.x; x++) {
-				sheet[y*1000 + x]++; }}}
+		for (int y=c.rect.leftTop.y; y<c.rect.rightBottom.y; y++) {
+			for (int x=c.rect.leftTop.x; x<c.rect.rightBottom.x; x++) {
+				sheet[y*DIM + x]++; }}}
 
 	int ax = 0;
-	for (int y=0; y<1000; y++) {
-		for (int x=0; x<1000; x++) {
-			if (sheet[y*1000+x] > 1) {
-				ax += 1; }}}
+	for (const auto& cell : sheet) {
+		if (cell > 1) {
+			ax++; }}
 
 	cout << ax << "\n";
 	return 0; }

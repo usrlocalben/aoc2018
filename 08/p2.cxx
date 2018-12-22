@@ -10,7 +10,7 @@
 using namespace std;
 
 
-pair<int, int> scana(const vector<int>& arr, int i) {
+pair<int, int> solve(const vector<int>& arr, int i) {
 	int oi = i;
 	int numChildren = arr[i];
 	int metaSize = arr[i+1];
@@ -20,7 +20,7 @@ pair<int, int> scana(const vector<int>& arr, int i) {
 	if (numChildren > 0) {
 		vector<int> vals;
 		for (int n=0; n<numChildren; n++) {
-			auto [consumed, amt] = scana(arr, i);
+			auto [consumed, amt] = solve(arr, i);
 			vals.push_back(amt);
 			i += consumed; }
 		for (int n=0; n<metaSize; n++) {
@@ -37,7 +37,7 @@ pair<int, int> scana(const vector<int>& arr, int i) {
 		// leaf
 		for (int n=0; n<metaSize; n++) {
 			ax += arr[i++]; }}
-	cout << "i:" << oi << " ax:" << ax << "\n";
+	//cout << "i:" << oi << " ax:" << ax << "\n";
 	return { i - oi, ax }; }
 
 
@@ -51,7 +51,7 @@ int main() {
 		mm = max(mm, x);
 		arr.push_back(x); }
 
-	auto [consumed, amt] = scana(arr, 0);
-	cout << "consumed: " << consumed << "\n";
-	cout << "amt: " << amt << "\n";
+	auto [consumed, amt] = solve(arr, 0);
+	//cout << "consumed: " << consumed << "\n";
+	cout << amt << "\n";
 	return 0; }
