@@ -374,6 +374,7 @@ int main() {
 	auto initGroups = groups;
 
 	// phase 1, probe for winning boost
+	//cout << "P1\n";
 	int winner;
 	boost[GOOD] = -10000;
 	do {
@@ -394,6 +395,9 @@ int main() {
 
 	//cout << "good can win with boost=" << boost[GOOD] << nl;
 
+	// phase 2, binary partition the range
+	//cout << "P2\n";
+	winner = 0;
 	int boostLower = 0;
 	int boostUpper = boost[GOOD] + 1;
 	while (boostUpper - boostLower > 1) {
@@ -401,27 +405,70 @@ int main() {
 		boost[GOOD] = b;
 
 		//cout << "<" << b << ">" << flush;
-		if (b == 32 || b==33) {
-			// fight enters an infinite loop ???
-			// assume good did not win, debug later
-			winner = BAD; }
-		else {
-			groups = initGroups;
-			while (numTeamsLeft() > 1) {
-				fight(); }
+		groups = initGroups;
 
+		int prevUnits = -1;
+		while (numTeamsLeft() > 1) {
+			fight();
+
+			int units = 0;
 			for (const auto& g : groups) {
-				if (g.units > 0) {
-					winner = g.side;
-					break;}}
+				units += g.units; }
+			if (units == prevUnits) {
+				winner = -1;  // stalemate
+				break;}
+			prevUnits = units; }
 
-			//cout << "p1: " << b << " = " << (winner==GOOD?"GOOD":"BAD") << nl;
-			}
+		if (winner == -1) {
+			// stalemate detected -- phase 3 needed
+			break; }
+
+		for (const auto& g : groups) {
+			if (g.units > 0) {
+				winner = g.side;
+				break;}}
+
+		//cout << "p1: " << b << " = " << (winner==GOOD?"GOOD":"BAD") << nl;
 
 		if (winner == BAD) {
 			boostLower = b+1; }
 		else {
 			boostUpper = b+1; }}
+
+	if (winner == -1) {
+	//cout << "P3\n";
+	// phase 3, linear probing to avoid stalemate games
+	for (; boostLower<boostUpper; boostLower++) {
+		//cout << "<" << boostLower << ">" << flush;
+		boost[GOOD] = boostLower;
+		winner = 0;
+		groups = initGroups;
+		int prevUnits = -1;
+		while (numTeamsLeft() > 1) {
+			fight();
+
+			int units = 0;
+			for (const auto& g : groups) {
+				units += g.units; }
+			if (units == prevUnits) {
+				winner = -1;  // stalemate
+				break;}
+			prevUnits = units; }
+
+		if (winner == -1) {
+			continue;}
+
+		for (const auto& g : groups) {
+			if (g.units > 0) {
+				winner = g.side;
+				break;}}
+
+		//cout << "p1: " << boostLower << " = " << (winner==GOOD?"GOOD":"BAD") << nl;
+
+		if (winner == GOOD) {
+			break; }}}
+
+	//cout << dbg(boostLower) << dbg(boostUpper) << nl;
 
 	// boostLower is the lower bounds for winning
 	groups = initGroups;
