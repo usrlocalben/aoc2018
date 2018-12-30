@@ -39,6 +39,13 @@ struct ivec2 {
 	ivec2& operator-=(ivec2 b) { x -= b.x; y -= b.y; return *this; }
 	ivec2& operator*=(ivec2 b) { x *= b.x; y *= b.y; return *this; } };
 
+struct ivec3 {
+	int x, y, z;
+
+	ivec3& operator+=(ivec3 b) { x += b.x; y += b.y; z += b.z; return *this; }
+	ivec3& operator-=(ivec3 b) { x -= b.x; y -= b.y; z -= b.z; return *this; }
+	ivec3& operator*=(ivec3 b) { x *= b.x; y *= b.y; z *= b.z; return *this; } };
+
 ivec2 vmin(ivec2 a, ivec2 b) { return ivec2{ min(a.x, b.x), min(a.y, b.y) }; }
 ivec2 vmax(ivec2 a, ivec2 b) { return ivec2{ max(a.x, b.x), max(a.y, b.y) }; }
 
@@ -163,25 +170,52 @@ bool consumeSuffix(string& text, const string& match) {
 		return true; }
 	return false; }
 
+/*
+	string line;
+	for (int y=0; y<YYY; y++) {
+		line.clear();
+		for (int x=0; x<XXX; x++) {
+			line.push_back(foo); }
+		cout << line << nl;}
+*/
+
+struct bot {
+	ivec3 pos;
+	int r; };
+
+
+int mdist(ivec3 a, ivec3 b) {
+	return abs(a.x-b.x) + abs(a.y-b.y) + abs(a.z-b.z); }
+
 
 int main() {
 	ios_base::sync_with_stdio(0);
 	cin.tie(0);
 
-	/*
-	vs lines;
+	vector<bot> bots;
+
 	string line;
-	while (getline(cin, line) {
-		lines.push_back(line); };
-	*/
+	while (getline(cin, line)) {
+		auto segments = split(line, ' ');
+		auto pos = segments[0].substr(5);
+		auto tmp = split(pos, ',');
+		int x = stoi(tmp[0]);
+		int y = stoi(tmp[1]);
+		int z = stoi(tmp[2]);
 
-	/*
-	vi nums;
-	int x;
-	while (cin >> x) {
-		nums.push_back(x); }
-	*/
+		tmp = split(segments[1], '=');
+		int r = stoi(tmp[1]);
 
-	int ax = 0;
-	cout << ax << nl;
+		bots.push_back({ {x,y,z}, r });}
+
+	nth_element(bots.begin(), bots.begin(), bots.end(), [](const auto& a, const auto& b) {
+		return a.r > b.r; });
+
+	bot strongest = bots.front();
+
+	int cnt = 0;
+	for (const auto& bot : bots) {
+		if (mdist(strongest.pos, bot.pos) <= strongest.r) {
+			cnt++; }}
+	cout << cnt << nl;
 	return 0; }
